@@ -1,0 +1,82 @@
+{__NOLAYOUT__}
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/static/Admin/css/base.css" />
+	<link rel="stylesheet" href="/static/Admin/css/login.css" />
+	<title>移动办公自动化系统</title>
+</head>
+<body>
+	<div id="container">
+		<div id="bd">
+			<div class="login1">
+            	<div class="login-top"><h1 class="logo"></h1></div>
+                <div class="login-input">
+                <form id='login'>
+                	<p class="user ue-clear">
+                    	<label>用户名</label>
+                        <input type="text" name='username'/>
+                    </p>
+                    <p class="password ue-clear">
+                    	<label>密&nbsp;&nbsp;&nbsp;码</label>
+                        <input type="password" name='password' />
+                    </p>
+                    <p class="yzm ue-clear">
+                    	<label>验证码</label>
+                        <input type="text" name='captcha'/>
+                        <cite><img src="{:URL('Login/captcha')}" id="verify_img" title="点击刷新验证码"/></cite>
+                    </p>
+                </div>
+                <div class="login-btn ue-clear">
+                	<a href="#" class="btn">登录</a>
+                  
+                </div>
+                </form>
+            </div>
+		</div>
+	</div>
+    <div id="ft">CopyRight&nbsp;2014&nbsp;&nbsp;版权所有&nbsp;&nbsp;郑州清新教育</div>
+</body>
+<script type="text/javascript" src="/static/Admin/js/jquery.js"></script>
+<script type="text/javascript" src="/static/Admin/js/common.js"></script>
+<script type="text/javascript" src="/static/Admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+var height = $(window).height();
+$("#container").height(height);
+$("#bd").css("padding-top",height/2 - $("#bd").height()/2);
+
+$(window).resize(function(){
+	var height = $(window).height();
+	$("#bd").css("padding-top",$(window).height()/2 - $("#bd").height()/2);
+	$("#container").height(height);
+	
+});
+//验证码点击刷新
+var img = $("#verify_img");
+var src = img.attr("src")+"?";
+$(function(){
+	
+	img.click(function(){
+		img.attr("src",src+Math.random());
+	});
+});
+
+$('.btn').click(function(){
+    $.post("{:URL('Login/index')}",$('#login').serialize(), function(data){
+    if(data.status==1) {
+    	layer.msg('登陆成功', {icon: 1});
+    	
+    	setTimeout("location.href='"+data.url+"'", 1000);
+    } else {
+    	layer.msg(data.info,{icon: 2});
+    	
+    	$('#verify_img').attr('src', src+ Math.random());
+
+    }
+  });  
+});  
+
+
+</script>
+</html>

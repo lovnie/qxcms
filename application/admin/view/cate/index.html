@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/static/admin/css/base.css" />
+<link rel="stylesheet" href="/static/admin/css/info-mgt.css" />
+<link rel="stylesheet" href="/static/admin/css/WdatePicker.css" />
+<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
+<title>清新cms后台管理系统</title>
+</head>
+<body>
+<div class="title"><h2>新闻栏目管理</h2></div>
+
+<div class="table-operate ue-clear">
+	<a href="javascript:;" class="add">添加</a>
+    <a href="javascript:;" class="del">删除</a>
+    
+
+</div>
+<div class="table-box">
+	<table>
+    	<thead>
+        	<tr>
+			<th class="check"><input class="check1" type="checkbox" id="SelectAll" onclick="selectAll();"/><label for="SelectAll">全选</label></th>
+            	<th class="num">序号</th>
+                <th class="name">栏目名</th>
+              
+                <th class="operate">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        	<tr>
+			<td class="check"><input id="subcheck" name="" type="checkbox" value="" /></td>
+
+            	<td class="num">1</td>
+                <td class="name">admin</td>
+              
+                <td class="table-operate"><a href="javascript:;" class="edit">编辑</a><a href="javascript:;" class="del">删除</a></td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+<div class="pagination ue-clear"></div>
+</body>
+<script type="text/javascript" src="/static/admin/js/common.js"></script>
+<script type="text/javascript" src="/static/admin/js/WdatePicker.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.pagination.js"></script>
+
+</html>
+<script type="text/javascript">
+$(".select-title").on("click",function(){
+	$(".select-list").hide();
+	$(this).siblings($(".select-list")).show();
+	return false;
+})
+$(".select-list").on("click","li",function(){
+	var txt = $(this).text();
+	$(this).parent($(".select-list")).siblings($(".select-title")).find("span").text(txt);
+})
+
+$('.pagination').pagination(100,{
+	callback: function(page){
+		alert(page);	
+	},
+	display_msg: true,
+	setPageNo: true
+});
+
+$("tbody").find("tr:odd").css("backgroundColor","#eff6fa");
+
+showRemind('input[type=text], textarea','placeholder');
+function selectAll(){
+	if ($("#SelectAll").attr("checked")) {
+		$(":checkbox").attr("checked", true);
+	} else {
+		$(":checkbox").attr("checked", false);
+	}
+}
+</script>
+

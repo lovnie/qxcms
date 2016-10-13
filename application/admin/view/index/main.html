@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/static/admin/css/base.css" />
+<link rel="stylesheet" href="/static/admin/css/home.css" />
+<link rel="stylesheet" href="/static/admin/css/info-reg.css" />
+<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
+<title>清新cms后台管理系统</title>
+</head>
+<body>
+<div class="article toolbar">
+	<div class="title ue-clear">
+    	<h2>常用工具</h2>
+        <a href="javascript:;" class="more">更多</a>
+    </div>
+    <div class="content">
+    	<ul class="toollist ue-clear">
+    		<li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon01.png" /></a>
+                <p><a href="javascript:;">通知公告</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon02.png" /></a>
+                <p><a href="javascript:;">知识库</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon03.png" /></a>
+                <p><a href="javascript:;">密码修改</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon04.png" /></a>
+                <p><a href="javascript:;">日程安排</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon05.png" /></a>
+                <p><a href="javascript:;">添加文章</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon06.png" /></a>
+                <p><a href="javascript:;">网络硬盘</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon07.png" /></a>
+                <p><a href="javascript:;">参数信息</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon08.png" /></a>
+                <p><a href="javascript:;">回收站</a></p>
+            </li>
+            <li>
+            	<a href="javascript:;" class="img"><img src="/static/Admin/images/icon09.png" /></a>
+                <p><a href="javascript:;">系统配置</a></p>
+            </li>
+            <li class="add-btn">
+            	<img src="/static/Admin/images/add.png" />
+            </li>
+    	</ul>
+        
+    </div>
+
+<div class="title ue-clear">
+    	<h2>系统信息</h2>
+        
+    </div>
+<div class="main">
+	<p class="short-input ue-clear newstyle">
+    	<label>系统环境：</label>{$serverInfo['server_version']}
+    </p>
+    <p class="short-input ue-clear newstyle">
+    	<label>服务器时间：</label>{$serverInfo['server_time']}
+    </p>
+    <p class="long-input ue-clear newstyle">
+    	<label>MySQL版本：</label>{$serverInfo['mysql_version']}
+    </p>
+    <p class="long-input ue-clear newstyle">
+    	<label>文件上传限制：</label>{$serverInfo['max_upload']}
+    </p>
+    <p class="long-input ue-clear newstyle">
+    	<label>脚本执行时限：</label>{$serverInfo['max_ex_time']}
+    </p>
+    <p class="short-input ue-clear newstyle">
+    	<label>框架版本：</label>ThinkPHP{$Think.version}
+    </p>   
+    <p class="short-input ue-clear newstyle">
+    	<label>开发人员：</label>清新教育  QQ97510528
+    </p>
+  
+</div>
+</div>
+</body>
+<script type="text/javascript" src="/static/admin/js/common.js"></script>
+</html>
+
