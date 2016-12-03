@@ -1,4 +1,8 @@
 eclipse.preferences.version=1
+encoding//application/admin/view/cate/ajaxIndex.html=UTF-8
 encoding//application/admin/view/cate/index.html=UTF-8
 encoding//application/admin/view/index/main.html=UTF-8
+encoding//public/static/admin/css/base.css=UTF-8
+encoding//public/static/admin/css/info-mgt.css=UTF-8
+encoding//public/static/admin/css/info-reg.css=UTF-8
 encoding/<project>=UTF-8

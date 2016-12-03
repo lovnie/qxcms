@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/static/admin/css/base.css" />
+<link rel="stylesheet" href="/static/admin/css/info-reg.css" />
+<title>移动办公自动化系统</title>
+</head>
+
+<body>
+<div class="title"><h2>添加栏目</h2></div>
+<div class="main">
+<form id='form'>
+    <p class="short-input ue-clear">
+    	<label>栏目名称：</label>
+        <input type="text" name='name' placeholder="请输入栏目" />
+    </p>
+    <p class="short-input ue-clear">
+    	<label>栏目别名：</label>
+        <input type="text" name='uname' placeholder="栏目别名" />
+    </p>
+    <div class="short-input select ue-clear">
+    	<label>所属分类：</label>
+        <div class="select-wrap">
+        	<div class="select-title ue-clear"><span data-val='0'>顶级分类</span><i class="icon"></i></div>
+            <ul class="select-list">
+            <li data-val='0'>顶级分类</li>
+			{foreach $cate as $v}
+            	<li data-val='{$v.id}'>{:str_repeat('&nbsp;&nbsp;',$v['level'])}|-{$v.name}</li>
+             {/foreach}  
+            </ul>
+        </div>
+    </div>
+  
+    <p class="long-input ue-clear">
+    	<label>栏目关键词：</label>
+        <input name='keyword' type="text" />
+    </p>
+    <p class="short-input ue-clear">
+    	<label>栏目描述：</label>
+        <textarea name='description'  placeholder="请输入内容"></textarea>
+    </p>
+</div>
+<div class="btn ue-clear">
+	<a href="javascript:;" class="confirm">确定</a>
+    <a href="javascript:;" class="clear">清空内容</a>
+</div>
+<input type="hidden" name="__token__" value="{$Request.token}" />
+</form>
+</body>
+<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/common.js"></script>
+<script type="text/javascript" src="/static/Admin/js/layer/layer.js"></script>
+<script type="text/javascript">
+var selval=$(".select-title").find("span").attr('data-val');
+var seltxt=$(".select-title").find("span").text();
+$('#form').append("<select style='display: none;' name='pid'><option value='"+selval+"' selected>"+seltxt+"</option></select>");
+
+$(".select-title").on("click",function(){
+$(".select-list").toggle();
+return false;
+});
+$(".select-list").on("click","li",function(){
+var txt = $(this).text();
+var val=$(this).attr('data-val');
+$(".select-title").find("span").text(txt).attr('data-val',val);
+$('#form').find('option').val(val);
+$('#form').find('option').text(txt);
+});
+showRemind('input[type=text], textarea','placeholder');
+$('.clear').click(function(){
+	$("#form :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+});
+
+$('.confirm').click(function(){
+	var val=$(this).attr('val');
+	if(!val){
+	$.post("{:URL('Cate/add')}",$('#form').serialize(), function(data){
+    if(data.status==1) {
+    	layer.msg('添加成功', {icon: 1});
+    	setTimeout("location.href='"+data.url+"'", 1000);
+    } else {
+    	layer.msg(data.info,{icon: 2});
+    	$('.confirm').removeAttr('val');
+
+    }
+  });}
+	$(this).attr('val','click');
+});  
+</script>
+</html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="/static/admin/css/base.css" />
 <link rel="stylesheet" href="/static/admin/css/info-mgt.css" />
-<link rel="stylesheet" href="/static/admin/css/WdatePicker.css" />
+<link rel="stylesheet" href="/static/admin/css/info-reg.css" />
 <script type="text/javascript" src="/static/admin/js/jquery.js"></script>
 <title>清新cms后台管理系统</title>
 </head>
@@ -21,61 +21,191 @@
 	<table>
     	<thead>
         	<tr>
-			<th class="check"><input class="check1" type="checkbox" id="SelectAll" onclick="selectAll();"/><label for="SelectAll">全选</label></th>
-            	<th class="num">序号</th>
-                <th class="name">栏目名</th>
-              
+			<th class="check"><input class="check1" type="checkbox" id="SelectAll"/><label for="SelectAll">全选</label></th>
+            	<th class="num">ID</th>
+                <th class="name">栏目名称</th>
+                <th class="num">别名</th>
                 <th class="operate">操作</th>
             </tr>
         </thead>
         <tbody>
-        	<tr>
-			<td class="check"><input id="subcheck" name="" type="checkbox" value="" /></td>
-
-            	<td class="num">1</td>
-                <td class="name">admin</td>
-              
-                <td class="table-operate"><a href="javascript:;" class="edit">编辑</a><a href="javascript:;" class="del">删除</a></td>
-            </tr>
-            
+        
         </tbody>
     </table>
 </div>
 <div class="pagination ue-clear"></div>
+<div id='add' style='display:none;'>
+<div class="main">
+<form id='form'>
+    <p class="short-input ue-clear">
+    	<label>栏目名称：</label>
+        <input type="text" name='name' placeholder="请输入栏目" />
+    </p>
+    <p class="short-input ue-clear">
+    	<label>栏目别名：</label>
+        <input type="text" name='uname' placeholder="栏目别名" />
+    </p>
+    <div class="short-input select ue-clear">
+    	<label>所属分类：</label>
+        <div class="select-wrap">
+        	<div class="select-title ue-clear"><span data-val='0'>顶级分类</span><i class="icon"></i></div>
+            <ul class="select-list">
+            <li data-val='0'>顶级分类</li>
+			{foreach $cate as $v}
+            	<li data-val='{$v.id}'>{:str_repeat('&nbsp;&nbsp;',$v['level'])}|-{$v.name}</li>
+             {/foreach}  
+            </ul>
+        </div>
+    </div>
+  
+    <p class="long-input ue-clear">
+    	<label>栏目关键词：</label>
+        <input name='keyword' type="text" />
+    </p>
+    <p class="short-input ue-clear">
+    	<label>栏目描述：</label>
+        <textarea name='description'  placeholder="请输入内容"></textarea>
+    </p>
+    <input type="hidden" name="__token__" value="{$Request.token}" />
+    </form>
+</div>
+<div class="btn ue-clear">
+	<a href="javascript:;" class="confirm">确定</a>
+    <a href="javascript:;" class="clear">清空内容</a>
+</div>
+</div>
 </body>
 <script type="text/javascript" src="/static/admin/js/common.js"></script>
-<script type="text/javascript" src="/static/admin/js/WdatePicker.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.pagination.js"></script>
-
+<script type="text/javascript" src="/static/Admin/js/layer/layer.js"></script>
 </html>
 <script type="text/javascript">
-$(".select-title").on("click",function(){
-	$(".select-list").hide();
-	$(this).siblings($(".select-list")).show();
-	return false;
-})
-$(".select-list").on("click","li",function(){
-	var txt = $(this).text();
-	$(this).parent($(".select-list")).siblings($(".select-title")).find("span").text(txt);
+$("#SelectAll").click(function(){ 
+    if(this.checked){
+        $("input[name='checkid']").each(function(){
+            this.checked = true;
+        }); 
+    }else{ 
+        $("input[name='checkid']").each(function(){
+            this.checked = false;
+        }); 
+    } 
+});
+$('.pagination').pagination({$count},{
+	callback: function(page){
+		ajaxIndex(page);	
+	},
+	items_per_page:10
+});
+ajaxIndex(0);
+function ajaxIndex(page){
+	page+=1;
+	$.get("{:URL('Cate/ajaxIndex')}",{p:page},function(data){
+		$("tbody").html(data);
+	});
+
+}
+
+$('.confirm').click(function(){
+	var val=$(this).attr('val');
+	if(!val){
+	$.post("{:URL('Cate/add')}",$('#form').serialize(), function(data){
+    if(data.status==1) {
+    	layer.msg(data.info, {icon: 1});
+    	setTimeout("location.href='"+data.url+"'", 1000);
+    } else {
+    	layer.msg(data.info,{icon: 2});
+    	$('.confirm').removeAttr('val');
+
+    }
+  });}
+	$(this).attr('val','click');
+});  
+$(document).on('click','.addinfo,.add',function(){
+	$(":input[name='id']").remove();
+	$(":input[name='pid']").remove();
+	$(":input[name='name']").val('');
+	$(":input[name='uname']").val('');
+	$('.select-title span').attr('data-val',$(this).siblings('.edit').attr('val'));
+	$('.select-title span').text($(this).attr('txt'));
+	layer.open({
+		 area: ['60%', '80%'],
+		  type: 1,
+		  title: false,	
+		  shift: 2,
+		  content: $('#add')
+		});
+	select();
+});
+$('.clear').click(function(){
+	$("#form :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+});
+$('tbody').on('click','.edit',function(){
+	$(":input[name='pid']").remove();
+	$(":input[name='id']").remove();
+	$.get("{:URL('Cate/getCateById')}",{id:$(this).attr('val') },function(data){
+		$(":input[name='name']").val(data.name);
+		$(":input[name='uname']").val(data.uname);
+		$('.select-title span').attr('data-val',data.pid);
+		$('.select-title span').text(data.pname);
+		$(":input[name='keyword']").val(data.keyword);
+		$(":input[name='description']").val(data.description);
+		open();
+	 })
+	function open(){
+		layer.open({
+			 area: ['60%', '80%'],
+			  type: 1,
+			  title: false,	
+			  shift: 2,
+			  content: $('#add')
+			});
+		select();
+	}
+	$('#form').append("<input name='id' type='hidden' value='"+$(this).attr('val')+"'/>");
+	
 })
 
-$('.pagination').pagination(100,{
-	callback: function(page){
-		alert(page);	
-	},
-	display_msg: true,
-	setPageNo: true
+function select(){
+	var selval=$(".select-title").find("span").attr('data-val');
+	var seltxt=$(".select-title").find("span").text();
+	$('#form').append("<select style='display: none;' name='pid'><option value='"+selval+"' selected>"+seltxt+"</option></select>");
+	
+	$(".select-list").on("click","li",function(){
+	var txt = $(this).text();
+	var val=$(this).attr('data-val');
+	$(".select-title").find("span").text(txt).attr('data-val',val);
+	$('#form').find('option').val(val);
+	$('#form').find('option').text(txt);
+	});
+}
+$(".select-title").on("click",function(){
+	$(".select-list").toggle();
+	return false;
+});
+$(document).on('click','.del',function(){
+	var id=$(this).siblings('.edit').attr('val');
+	var ids='';
+	 $('input[name="checkid"]:checked').each(function(){ 
+		ids+=$(this).val()+","; 
+	});
+	id=id?id:ids.substr(0,ids.length-1);
+ 	$.get("{:URL('Cate/del')}",{'id':id},function(data){
+		 if(data.status==1) {
+		    	layer.msg(data.info, {icon: 1});
+		    	setTimeout("location.href='"+data.url+"'", 1000);
+		  } else {
+		    	layer.msg(data.info,{icon: 2});
+		 }
+	});
+	
+});
+$("tbody").find("tr:odd").css("backgroundColor","#eff6fa");
+showRemind('input[type=text], textarea','placeholder');
+
+$("tbody").on("onload","tr:odd",function(data){
+    $(this).css("backgroundColor","#eff6fa")
 });
 
-$("tbody").find("tr:odd").css("backgroundColor","#eff6fa");
-
-showRemind('input[type=text], textarea','placeholder');
-function selectAll(){
-	if ($("#SelectAll").attr("checked")) {
-		$(":checkbox").attr("checked", true);
-	} else {
-		$(":checkbox").attr("checked", false);
-	}
-}
 </script>
 

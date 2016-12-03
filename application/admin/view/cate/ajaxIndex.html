@@ -1,0 +1,9 @@
+{foreach $cate as $v}
+    <tr>
+		 <td class="check"><input  name="checkid" type="checkbox" value="{$v.id}" /></td>
+         <td class="num">{$v.id}</td>
+         <td class="name">{:str_repeat('&nbsp;&nbsp;',$v['level'])}|-{$v.name}</td>
+         <td class="num">{$v.uname}</td>
+         <td class="table-operate"><a href="javascript:;" val='{$v.id}' class="edit">编辑</a><a href="javascript:;" class="del">删除</a>{lt name="v.level" value="3"}<a href="javascript:;"  txt="{:str_repeat('— ',$v['level']-1)}{$v.name}" class="addinfo">添加子栏目</a>{/lt}</td>
+     </tr>
+{/foreach}
